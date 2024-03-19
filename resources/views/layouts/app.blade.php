@@ -40,15 +40,14 @@
     <script>
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
-            apiKey: "AIzaSyDRMZvi_GAwwlLQ3Nb5_WHwzik7_yW2RxA",
-            authDomain: "laravelchatnew.firebaseapp.com",
+            apiKey: "AIzaSyBYdmaLCYwLqeU-Ud8G2T6Dnww5eS_a8II",
             databaseURL: "https://laravelchatnew-default-rtdb.firebaseio.com",
-            projectId: "laravelchatnew",
-            storageBucket: "laravelchatnew.appspot.com",
-            messagingSenderId: "935856049269",
-            appId: "1:935856049269:web:389a5ab304985836bafc3c",
-            measurementId: "G-EGNTXF27R6"
-
+            authDomain: "hippacompliant-6c5ef.firebaseapp.com",
+            projectId: "hippacompliant-6c5ef",
+            storageBucket: "hippacompliant-6c5ef.appspot.com",
+            messagingSenderId: "1023196025670",
+            appId: "1:1023196025670:web:0168e6bd37700ab77acb47",
+            measurementId: "G-804ZHKGB3H"
         };
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();

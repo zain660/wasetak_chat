@@ -46,9 +46,9 @@ class LoginController extends Controller
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required',
-        ]);
+        ]); 
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
-        {
+        { 
             if (auth()->user()->role == 1) {
                 return redirect()->route('/admin/dashboard');
             }
@@ -57,6 +57,8 @@ class LoginController extends Controller
             }else{
                 return redirect()->back()->with('error','Your Account was deactivated from our system');
             }
+        }else{
+            dd(auth()->user());
         }
     }
 

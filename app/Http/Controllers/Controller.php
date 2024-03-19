@@ -97,7 +97,7 @@ class Controller extends BaseController
             curl_close($ch);
         }
 
-        //dd($return_array);
+        dd($res);
         $user = User::find($data['id']);
         $this->send_notification_to_user(['user_id' => $data['id'], 'message' => Auth::user()->name . " Send You a message", 'url' => '/Conversation/' . $user_sec->id . '/' . $user_sec->name]);
 
