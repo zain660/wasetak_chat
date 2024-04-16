@@ -31,6 +31,47 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+     public function sendNotification(Request $request)
+     {
+         $firebaseToken = User::whereNotNull('device_token')->pluck('device_token')->all();
+           
+         $SERVER_API_KEY = 'AIzaSyBYdmaLCYwLqeU-Ud8G2T6Dnww5eS_a8II';
+   
+         $data = [
+             "registration_ids" => $firebaseToken,
+             "notification" => [
+                 "title" => $request->title,
+                 "body" => $request->body,  
+             ]
+         ];
+         $dataString = json_encode($data);
+     
+         $headers = [
+             'Authorization: key=' . $SERVER_API_KEY,
+             'Content-Type: application/json',
+         ];
+     
+         $ch = curl_init();
+       
+         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+         curl_setopt($ch, CURLOPT_POST, true);
+         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+                
+         $response = curl_exec($ch);
+   
+         dd($response);
+     }
+
+     public function save_device_token(Request $request){
+        User::where('id',auth()->user()->id)->update([
+            'device_token'=> $request->token
+        ]);
+        return response()->json(['token saved successfully.']);
+     }
     public function index()
     {
         $conversation = ChatConvo::where('sender_id',Auth::user()->id)->orwhere('reciever_id',Auth::user()->id)->orderBy('id','DESC')->get();
@@ -41,7 +82,7 @@ class HomeController extends Controller
         return view('home',compact('conversation','count_conversation','all_group','all_group_count'));
     }
 
-    public function conversation($id,$name){
+    public function conversation(Request $request,$id,$name){
 
          $conversation = ChatConvo::where('sender_id',Auth::user()->id)
          ->orwhere('reciever_id',Auth::user()->id)
@@ -54,7 +95,7 @@ class HomeController extends Controller
          ->orwhere('block_to',Auth::user()->id)
          ->where('block_from',$id)->first();
 
-        return view('conversation',compact('id','name','conversation','count_conversation','contact_details','check_already_block'));
+        return view('conversation',compact('request', 'id','name','conversation','count_conversation','contact_details','check_already_block'));
     }
 
     public function send_message(Request $request, $id){
@@ -204,7 +245,10 @@ class HomeController extends Controller
                 $group_members->group_id = $groups->id;
                 $group_members->participant_id = Auth::user()->id;
                 $group_members->save();
-                return response()->json([$groups->id]);
+                return response()->json([
+                    'code' => 200,
+                    'group_id' => $groups->id
+                ]);
 
 
 

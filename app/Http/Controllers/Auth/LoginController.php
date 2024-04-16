@@ -49,16 +49,19 @@ class LoginController extends Controller
         ]); 
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
         { 
+            // dd(auth()->user());
             if (auth()->user()->role == 1) {
-                return redirect()->route('/admin/dashboard');
+                return redirect()->route('admin.dashboard');
             }
-            if (auth()->user()->role == 0 && auth()->user()->account_is_active == 1) {
+            elseif (auth()->user()->role == 0 && auth()->user()->account_is_active == 1) {
+                // dd('sss');
                 return redirect()->route('/');
             }else{
                 return redirect()->back()->with('error','Your Account was deactivated from our system');
             }
         }else{
-            dd(auth()->user());
+            // dd(auth()->user());
+            return redirect()->back()->with('error','Invalid email or password.');
         }
     }
 
